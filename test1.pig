@@ -1,11 +1,11 @@
-register /home/participant/git/commoncrawl-examples/lib/*.jar; 
+register lib/*.jar; 
 
-register /home/participant/git/commoncrawl-examples/dist/lib/commoncrawl-examples-1.0.1.jar;
+register dist/lib/commoncrawl-examples-1.0.1.jar;
 
-register /home/participant/git/commoncrawl-examples/trunk/myudfs.jar;
+register trunk/myudfs.jar;
 
 a = LOAD '/data/public/common-crawl/award/testset/*.arc.gz' USING org.commoncrawl.pig.ArcLoader() as (date, length, type, statuscode, ipaddress, url, html);
-b = LOAD '/home/participant/git/commoncrawl-examples/companies' USING PigStorage(':') AS (rank:int, name:chararray);
+b = LOAD 'companies' USING PigStorage(':') AS (rank:int, name:chararray);
 
 X = FOREACH a GENERATE date, ipaddress, html;
 Z = FILTER X BY html IS NOT NULL;
@@ -19,5 +19,4 @@ P6 = JOIN b BY name, P5 BY group;
 P7 = FOREACH P6 GENERATE rank, name, counting;
 P8 = ORDER P7 BY rank;
 
-STORE P8 INTO 'resultTestSet';
-DUMP P8;
+STORE P8 INTO 'resultSARATestSet';
